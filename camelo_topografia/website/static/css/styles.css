@@ -75,6 +75,7 @@ section {
     text-align: center;
     height: 120vh; 
     width: 100%;
+    background: url("{% static 'elementos/trabalho.jpg' %}") no-repeat center top/cover; 
     background-attachment: fixed; 
     color: white;
     padding-top: calc(20vh + 80px); 
@@ -373,6 +374,7 @@ section {
     transform: translateY(0);
     box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
 }
+
 
 footer {
     background-color: #053C5E; /* Azul escuro para o fundo */

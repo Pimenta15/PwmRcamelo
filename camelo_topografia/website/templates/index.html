@@ -7,9 +7,48 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>R Camelo Topografia</title>
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
     <link rel="stylesheet" href="{% static 'css/responsive.css' %}">
     <link rel="icon" href="{% static 'logo/logo-RCamelo-removebg.png' %}" type="image/jpeg">
+
+    <style>
+        /* Aumenta o tamanho do spinner */
+#loading-spinner .spinner-border {
+    width: 3rem;
+    height: 3rem;
+    border-width: 0.3rem; /* Ajuste a espessura da borda se necessário */
+}
+
+/* Centraliza o spinner */
+#loading-spinner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+}
+
+/* Personaliza a aparência das mensagens de feedback */
+#feedback-message {
+    margin-top: 20px;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+/* Adiciona um fundo de sucesso */
+.alert-success {
+    background-color: #d4edda;
+    border-color: #c3e6cb;
+    color: #155724;
+}
+
+/* Adiciona um fundo de erro */
+.alert-danger {
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+    color: #721c24;
+}
+    </style>
 </head>
 
 <body>
@@ -26,7 +65,20 @@
         </nav>
     </header>
 
-    <section class="banner" style="background: url({% static 'elementos/trabalho.jpg' %}) no-repeat center top/cover">
+    <section class="banner" style="background: url({% static 'elementos/trabalho.jpg' %}) no-repeat center top/cover;position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start; 
+    align-items: center; 
+    text-align: center;
+    height: 120vh; 
+    width: 100%;
+    background-attachment: fixed; 
+    color: white;
+    padding-top: calc(20vh + 80px); 
+    padding-left: 20px;
+    padding-right: 20px;
+    box-shadow: inset 0 0 50px rgba(0, 0, 0, 0.5); ">
         <h2>Sua Parceira Ideal para Projetos de Engenharia e Construção</h2>
         <a href="#servicos-section" class="scroll-down">
             <img src="{% static 'elementos/arrow-down.png' %}" alt="Seta para baixo">
@@ -100,12 +152,22 @@
     <div class="contact" id="contatos">
         <div class="contact-form">
             <h1>Contate-nos</h1>
-            <form>
+            <form action ="/send-email/"method = "POST">
+                {% csrf_token %}
                 <input type="text" name="name" placeholder="Nome" required>
                 <input type="email" name="email" placeholder="Email" required>
                 <textarea name="message" placeholder="Descrição" required></textarea>
                 <button type="submit">Enviar</button>
             </form>
+            <div id="loading-spinner" class="mt-3" style="visibility: hidden;">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Carregando...</span>
+                </div>
+            </div>
+            
+        
+            <div id="feedback-message" class="mt-3"></div>
+        </div>
         </div>
     </div>
 
@@ -140,6 +202,60 @@
             </div>
         </div>
     </footer>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+    const form = document.querySelector("form");
+    const messageDiv = document.getElementById("feedback-message"); // Pega a div do feedback
+    const loadingSpinner = document.getElementById("loading-spinner"); // Pega o spinner de carregamento
+
+    form.addEventListener("submit", function(event) {
+        event.preventDefault();  // Previne o envio normal do formulário
+
+        // Mostra o spinner de carregamento
+        loadingSpinner.style.visibility = "visible"
+
+        // Cria o objeto FormData com os dados do formulário
+        const formData = new FormData(form);
+
+        // Envia os dados via AJAX
+        fetch("{% url 'send_email' %}", {
+            method: "POST",
+            body: formData,
+            headers: {
+                "X-CSRFToken": document.querySelector('[name="csrfmiddlewaretoken"]').value,  // Adiciona o token CSRF
+            }
+        })
+        .then(response => response.json())  // Recebe a resposta JSON
+        .then(data => {
+            // Oculta o spinner de carregamento
+            loadingSpinner.style.visibility = "hidden";
+
+            // Exibe o feedback com base no status
+            if (data.status === "success") {
+                messageDiv.textContent = data.message;
+                messageDiv.classList.add("alert", "alert-success");  // Classe de sucesso
+                messageDiv.classList.remove("alert-danger");  // Remove a classe de erro, caso esteja presente
+            } else {
+                messageDiv.textContent = data.message;
+                messageDiv.classList.add("alert", "alert-danger");  // Classe de erro
+                messageDiv.classList.remove("alert-success");  // Remove a classe de sucesso, caso esteja presente
+            }
+        })
+        .catch(error => {
+            // Oculta o spinner de carregamento em caso de erro
+            loadingSpinner.style.visibility = "hidden";
+
+            messageDiv.textContent = "Ocorreu um erro ao enviar o email.";
+            messageDiv.classList.add("alert", "alert-danger");  // Classe de erro
+            messageDiv.classList.remove("alert-success");  // Remove a classe de sucesso
+        });
+    });
+});
+
+
+        </script>
+        
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}" defer></script>
 </body>
 </html>
     
