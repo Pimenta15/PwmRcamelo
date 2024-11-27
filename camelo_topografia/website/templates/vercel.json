@@ -9,7 +9,7 @@
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "project/wsgi.py"
+      "dest": "camelo_topografia/camelo_topografia/wsgi.py"
     }
   ]
 }
