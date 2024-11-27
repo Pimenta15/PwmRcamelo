@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-gksm713__#^hre!y!%%g5tt_vd%$4x$=knj0d$-j0*ivc=ee!=
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['*']  # Ou, se você souber o domínio, pode colocar o domínio específico.
+ALLOWED_HOSTS = ['pwmrcamelo.onrender.com']  # Ou, se você souber o domínio, pode colocar o domínio específico.
 
 
 
@@ -123,7 +123,7 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'website/static'),  # Diretório onde seus arquivos estáticos estão no projeto
 ]
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # Diretório onde os arquivos serão coletados para deploy
-
+STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
