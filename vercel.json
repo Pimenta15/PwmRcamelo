@@ -1,14 +1,14 @@
 
 {
     "builds": [{
-        "src": "camelo_topopgrafia/wsgi.py",
+        "src": "camelo_topografia/camelo_topopgrafia/wsgi.py",
         "use": "@vercel/python",
         "config": { "maxLambdaSize": "15mb", "runtime": "python3.9" }
     }],
     "routes": [
         {
             "src": "/(.*)",
-            "dest": "camelo_topografia/wsgi.py"
+            "dest": "camelo_topografia/camelo_topografia/wsgi.py"
         }
     ]
 }
